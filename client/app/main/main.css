@@ -1,3 +1,51 @@
+
+#poll-item {
+    margin-top: 15px;
+    outline: solid black;
+}
+
+#del-option {
+    position: absolute;    
+    margin-left: 5px;
+    width: 75px;
+}
+
+#del-poll-btn {
+    width: 75px;
+    position: relative;
+    float: right;
+}
+
+#poll-option-inputbox {
+    margin-bottom: 15px;
+}
+
+#new-poll {
+    text-align: center;
+}
+
+#poll-header {
+    font-weight: 400;
+}
+
+#view-polls {
+    text-align: center;
+    width: 350px;
+}
+
+#congrats {
+    text-align: center;
+
+}
+
+.del-poll-btn {
+    width: 50px;
+}
+
+.form-control {
+    text-align: left;
+}
+
 .thing-form {
     margin: 20px 0;
 }
@@ -31,4 +79,22 @@
 
 .navbar-text {
     margin-left: 15px;
+}
+
+
+.btn {
+    width: 150px;
+}
+
+
+p {
+    font-weight: bold;
+}
+
+.form-control {
+    width: 450px !important;
+}
+
+#remove-poll-btn {
+    width: 50px !important;
 }

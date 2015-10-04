@@ -1,14 +1,24 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
+  <!-- USER NOT LOGGED IN -->
+  <div class="container" ng-hide="isLoggedIn() || isAdmin()">
+    <h1>VotePlex</h1>
+    <p class="lead">Create custom polls with live results</p>
+    <button class="btn btn-success" ng-click="signUp()">Sign Up</button>
+  </div>
+
+  <!-- USER LOGGED IN -->
+  <div class="container" ng-show="isLoggedIn() || isAdmin()">
+    <h1>Dashboard</h1>
+    <p class="lead">What would you like to do today?</p>
+    <button class="btn btn-success" ng-click="newPoll() ; showPolls = false ; pollPosted = false">New Poll</button>
+    <button class="btn btn-info" ng-click="getPolls() ; pollPosted = false">My Polls</button>
   </div>
 </header>
 
-<div class="container">
+<div class="container" ng-hide="isLoggedIn() || isAdmin()">
   <div class="row">
     <div class="col-lg-12">
       <h1 class="page-header">Features:</h1>
@@ -18,6 +28,65 @@
     </div>
   </div>
 </div>
+
+
+<div class="container" ng-show="isLoggedIn() || isAdmin()">
+  <!--  CREATING A NEW POLL -->
+  <div class="container" id="new-poll" ng-show="isLoggedIn() || isAdmin()" ng-hide="showPolls || pollPosted || showGraph">
+    <h1 id="poll-header">New Poll</h1>
+    <p>Name your poll.</p>
+
+    <form class="form-inline">
+      <input class="form-control" placeholder="What is your favorite brand?" ng-model="poll.title"></input>
+      <p>Options</p>
+
+      <div id="poll-option-inputbox" ng-repeat="options in dummyPoll.options track by $index">
+
+        <input type="text" class="form-control" placeholder="{{options.option}}" ng-model="poll.options[$index].option"></input>
+        <button id="del-option" class="btn btn-danger" ng-click="removeOption($index)">Delete</button>
+      
+      </div>
+
+      <div class="row">
+        <button class="btn btn-default" ng-click="addOption()">More Options</button>
+        <button class="btn btn-success" ng-click="addPoll()">Submit</button>
+      </div>
+    </form>
+  </div>
+  <!-- END OF POLL CREATION -->
+
+  <!-- ADD VOTE TO POLL -->
+  <div class="container" id="congrats" ng-show="pollPosted">
+    <h1>Congratulations!<h1>
+    <h3>{{poll.title}}</h3>
+    <h1>{{getCurrentUser()._id}}</h1> 
+      <div ng-repeat="options in poll.options track by $index">
+        <h1>{{options.option}}</h1>
+        <button ng-click="addVoteCount($index)">Vote!</button>
+    
+      </div>
+  </div>
+  <!-- END ADD VOTE TO POLL -->
+
+  <!-- VIEW POLLS -->
+  <div class="container" id="view-polls" ng-show="showPolls">
+    <div ng-repeat="poll in polls" id="poll-item">
+      <button ng-click="showPollDetails(poll._id)">{{poll.title}}</button>
+      <button id="del-poll-btn" class="btn btn-danger" ng-click="deletePoll(poll._id)">Delete</button>
+    </div>
+
+  </div>
+  <!-- END VIEW POLLS -->
+
+
+  <!-- SHOW POLL DETAILS(GRAPH) -->
+  <div class="container" id="graph" ng-show="showGraph">
+    <div id="chart_div" align='center'></div>
+  </div>
+  <!-- END SHOW POLL DETAILS(GRAPH) -->
+</div>
+
+
 
 <footer class="footer">
   <div class="container">
