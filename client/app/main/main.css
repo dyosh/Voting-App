@@ -1,45 +1,149 @@
 
-#poll-item {
-    margin-top: 15px;
-    outline: solid black;
+.container {
+    text-align: center;
 }
 
-#del-option {
-    position: absolute;    
-    margin-left: 5px;
-    width: 75px;
+#globe {
+    font-size: 95px; 
+    color: #5BB95C;   
+}
+
+#facebook {
+    font-size: 95px;       
+    color: #4394B9;
+}
+
+#lightning-bolt {
+    font-size: 95px;
+    color: #F9EA37;
+}
+
+#main-page-description {
+    text-align: center !important;
+    margin-top: 45px;
+    font-weight: 200 !important;
+}
+
+.main-pg-titles {
+    font-weight: 300;
+}
+
+#view-polls {
+    text-align: center;
+    width: 375px;
+    margin-top: 35px;
+}
+
+#del-poll-btn-div {
+    width: 45px;
+    float: left;
 }
 
 #del-poll-btn {
-    width: 75px;
-    position: relative;
-    float: right;
+    background: #C3C3C3;
+    color: white;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    width: 45px;
+    height: 28px;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 10px;
+    /*float: right;*/
+}
+
+#del-poll-btn:hover {
+    background: #D44B47;
+    color: white;
+}
+
+#poll-title-area {
+    background-color: #D7D7D7;
+    color: white;
+    float: left;
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+    height: 28px;
+    width: 300px;
+}
+
+#poll-title-area:hover {
+    color: white;
+    background-color: #5BB95C;
+}
+
+#poll-title-text {
+    font-size: 18px;
+    font-weight: 300;  
+}
+
+#poll-title-vote {
+    color: #5cb85c;
+}
+
+#poll-item {
+    margin-bottom: 8px;
+    height: 30px;
+    width: 380px;
+    /*border: 1px solid #000;*/
+    border-radius: 6px; 
+}
+
+
+#del-option:hover {
+    background-color: #D9534F;
+    color: white;
 }
 
 #poll-option-inputbox {
     margin-bottom: 15px;
 }
 
+.poll-vote {
+    display: inline-block;
+    margin-right: 7px;
+    margin-top: 15px;
+}
+
+#poll-title {
+    max-width:435px !important;
+    margin-bottom: 15px;
+}
+
+input, .input-group {
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.input-group-addon {
+    min-width: 10px;
+}
+
 #new-poll {
     text-align: center;
+    max-width: 600px;
 }
 
 #poll-header {
     font-weight: 400;
 }
 
-#view-polls {
+
+.congrats {
     text-align: center;
-    width: 350px;
 }
 
-#congrats {
-    text-align: center;
-
+.congrats h1,
+.congrats h2,
+.congrats h3 {
+    font-weight: 300;
 }
 
-.del-poll-btn {
-    width: 50px;
+
+#cast-vote-question {
+    margin-bottom: 30px;
 }
 
 .form-control {
@@ -48,6 +152,16 @@
 
 .thing-form {
     margin: 20px 0;
+}
+
+#graph {
+    text-align: center;
+    margin-top: 25px;
+}
+
+#graph h3 {
+    font-weight: 300;
+    font-size: 35px;
 }
 
 #banner {
@@ -87,9 +201,9 @@
 }
 
 
-p {
+/*p {
     font-weight: bold;
-}
+}*/
 
 .form-control {
     width: 450px !important;

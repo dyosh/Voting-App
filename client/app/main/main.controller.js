@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myYoAppApp')
-  .controller('MainCtrl', function ($scope, $http, $location, Auth) {
+  .controller('MainCtrl', function ($scope, $http, $location, Auth, $rootScope) {
     $scope.awesomeThings = [];
 
     $scope.isCollapsed = true;
@@ -40,7 +40,6 @@ angular.module('myYoAppApp')
       $scope.showGraph = false;
 
       $http.post('/api/polls', $scope.poll).success(function(poll){
-        console.log("we did it!");
         $scope.poll = poll;
       });
       $scope.pollPosted = true;
@@ -95,7 +94,21 @@ angular.module('myYoAppApp')
           console.log("the poll item has been updated");
           console.log(updatedPoll);
           $scope.poll = updatedPoll;
+
+          $scope.showPollDetails($scope.poll._id);
+
+          $scope.pollPosted = false;
+          $scope.showGraph = true;
         });
+      }
+
+    };
+
+    var userHasVoted = function(poll) {
+      if (poll.votedUsers.indexOf($scope.getCurrentUser()._id) > -1) {
+        return true;
+      } else {
+        return false;
       }
     };
 
@@ -104,6 +117,10 @@ angular.module('myYoAppApp')
       // grab the poll matching the given id from the db
       $http.get('/api/polls/' + id).success(function(poll) {
         $scope.poll = poll;
+
+        // check to see if the user has already voted on the poll
+        $scope.displayVoteChoice = userHasVoted($scope.poll);
+
         google.load('visualization', '1', {packages: ['corechart', 'bar'],
           callback: function() {
 
@@ -119,15 +136,15 @@ angular.module('myYoAppApp')
             data.addRows(info);
 
             // Set chart options
-            var options = {'title': poll.title,
-                           'animation': {
+            var options = {'animation': {
                              'startup': true,
                              duration: 1000,
                              easing: 'out', 
-                           },
+                           }
+                          };
                            // vAxis: {minValue:0, maxValue: 10},
-                           'width': 700,
-                           'height': 500 };
+                           // 'width': 700,
+                           // 'height': 500 };
 
             // Instantiate and draw our chart, passing in some options
             var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
@@ -139,11 +156,7 @@ angular.module('myYoAppApp')
         });        
       });
       $scope.showGraph = true;
+
     };
-
-
-    $http.get('/api/things').success(function(awesomeThings) {
-      $scope.awesomeThings = awesomeThings;
-    });  
 
   });
