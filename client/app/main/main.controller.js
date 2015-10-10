@@ -12,7 +12,7 @@ angular.module('myYoAppApp')
     var reset = function() {
       $scope.dummyPoll = {
         title: "What is your favorite brand of soda?",
-        author: "",
+        author: $scope.getCurrentUser()._id,
         options: [
           {option: "coke", count: 0}, 
           {option: "pepsi", count: 0}
@@ -21,7 +21,7 @@ angular.module('myYoAppApp')
 
       $scope.poll = {
         title: "",
-        author: "",
+        author: $scope.getCurrentUser()._id,
         options: [
           {option: "", count: 0 },
           {option: "", count: 0 },
@@ -45,6 +45,17 @@ angular.module('myYoAppApp')
         $scope.poll = poll;
       });
       $scope.pollPosted = true;
+    };
+
+    $scope.getUserPolls = function() {
+      $scope.showGraph = false;
+
+      // console.log($scope.getCurrentUser()._id);
+
+      $http.get('/api/polls/userpolls/' + $scope.getCurrentUser()._id).success(function(polls) {
+        $scope.polls = polls;
+        $scope.showPolls = true;
+      });
     };
 
     $scope.getPolls = function() {
