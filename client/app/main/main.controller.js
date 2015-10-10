@@ -12,6 +12,7 @@ angular.module('myYoAppApp')
     var reset = function() {
       $scope.dummyPoll = {
         title: "What is your favorite brand of soda?",
+        author: "",
         options: [
           {option: "coke", count: 0}, 
           {option: "pepsi", count: 0}
@@ -20,6 +21,7 @@ angular.module('myYoAppApp')
 
       $scope.poll = {
         title: "",
+        author: "",
         options: [
           {option: "", count: 0 },
           {option: "", count: 0 },
