@@ -147,9 +147,10 @@ angular.module('myYoAppApp')
     $scope.showPollDetails = function(id) {
       $rootScope.invalidPoll = false;
       $rootScope.graphLoading = true;
+      $rootScope.graphLoaded = false;
       $scope.showPolls = false; // need a better way, this method of show/hide becomes more confusing as num grows
 
-      // if a chart exists, clear it before loading a new one so there is no laggy leftovers
+      // if a chart exists, clear it before loading a new one so there are no laggy leftovers
       if ($scope.chart) {
         console.log("clearChart called");
         $scope.chart.clearChart();
@@ -190,11 +191,11 @@ angular.module('myYoAppApp')
             // Instantiate and draw our chart, passing in some options
             $scope.chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
             $scope.chart.draw(data, options);
-            window.scrollTo(0, document.body.scrollHeight);
           
           }
-
-        });        
+        });
+            $rootScope.graphLoaded = true;
+            console.log($rootScope.graphLoaded);                
       }).error(function(err) {
         $rootScope.invalidPoll = true;
         console.log(err);

@@ -109,8 +109,11 @@
  
   <!-- SHOW POLL DETAILS(GRAPH) -->
   <div class="container" id="graph" ng-show="showGraph">
-    <h3>{{poll.title}}</h1>
-    <p id="username-text"><i id="user-icon" class="fa fa-user"></i>  {{poll.username}}</p>
+    <div ng-show="graphLoaded">
+      <h3>{{poll.title}}</h1>
+      <p id="username-text"><i id="user-icon" class="fa fa-user"></i>  {{poll.username}}</p>
+    </div>
+
     <div id="chart_div" align='center'></div>
 
     <div ng-hide="displayVoteChoice">
@@ -120,7 +123,7 @@
     </div>
 
     <!-- SHARING LINK -->  
-    <div id="share-poll">
+    <div id="share-poll" ng-show="graphLoaded">
       <p><span>Share it!</span>   <i class="fa fa-hand-o-right"></i>    https://morning-castle-9000.herokuapp.com/polls/{{poll._id}}</p>
     </div>
     <!-- END SHARING LINK -->     
@@ -129,7 +132,7 @@
   <!-- END SHOW POLL DETAILS(GRAPH) -->
 </div>
 
-<footer class="footer">
+<footer class="footer" ng-show="graphLoaded">
   <div class="container">
       <p>Free Code Camp Basejump |
         <a href="http://freecodecamp.com/dyosh">dyosh</a>
