@@ -9,10 +9,6 @@ angular.module('myYoAppApp')
     $scope.isAdmin = Auth.isAdmin;
     $rootScope.getCurrentUser = Auth.getCurrentUser;
 
-    console.log("USER NAME BELOW THIS");
-    console.log($rootScope.getCurrentUser().name);
-
-
     var reset = function() {
       $scope.dummyPoll = {
         title: "What is your favorite brand of soda?",
@@ -62,22 +58,22 @@ angular.module('myYoAppApp')
 
     $scope.getUserPolls = function() {
       $scope.showGraph = false;
+      $scope.showPolls = true;
 
       $scope.isUserPoll = true;
       // console.log($scope.getCurrentUser()._id);
       $http.get('/api/polls/userpolls/' + $scope.getCurrentUser()._id).success(function(polls) {
         $scope.polls = polls;
-        $scope.showPolls = true;
       });
     };
 
     $scope.getPolls = function() {
+      $scope.showPolls = true;
       $scope.showGraph = false;
       $scope.isUserPoll = false;
 
       $http.get('/api/polls').success(function(polls) {
         $scope.polls = polls;
-        $scope.showPolls = true;
       });
     };
 
@@ -152,10 +148,14 @@ angular.module('myYoAppApp')
       $rootScope.invalidPoll = false;
       $rootScope.graphLoading = true;
       $scope.showPolls = false; // need a better way, this method of show/hide becomes more confusing as num grows
-      // grab the poll matching the given id from the db
-      $http.get('/api/polls/' + id).success(function(poll) {
-        console.log("GET poll called");
-        console.log(poll);
+
+      // if a chart exists, clear it before loading a new one so there is no laggy leftovers
+      if ($scope.chart) {
+        console.log("clearChart called");
+        $scope.chart.clearChart();
+      }
+
+      $http.get('/api/polls/' + id).success(function(poll) {  // grab the poll matching the given id from the db
         $scope.poll = poll;
         $rootScope.sharedPoll = poll; // // allows user to vote on /polls/:pollid page
 
@@ -188,8 +188,8 @@ angular.module('myYoAppApp')
                            // 'height': 500 };
 
             // Instantiate and draw our chart, passing in some options
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
+            $scope.chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            $scope.chart.draw(data, options);
             window.scrollTo(0, document.body.scrollHeight);
           
           }
@@ -206,12 +206,8 @@ angular.module('myYoAppApp')
     // $rootScope.graphLoading = false;
     if ($location.path().indexOf('/polls/') !== -1 && !$rootScope.graphLoading) {
       var idPoll = $location.path().slice(7, $location.path().length);
-      console.log("GRAPH NOT LOADING");
-      console.log(idPoll);
       $scope.showPollDetails(idPoll);
 
-    } else {
-      console.log("no");
     }
 
   });
