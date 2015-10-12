@@ -4,6 +4,7 @@
 }
 
 #share-poll {
+    font-size: 20px;
     margin-top: 25px;
 }
 
@@ -177,7 +178,6 @@ input, .input-group {
     font-weight: 300;
 }
 
-
 #cast-vote-question {
     margin-bottom: 30px;
 }
@@ -188,6 +188,13 @@ input, .input-group {
 
 .thing-form {
     margin: 20px 0;
+}
+
+#invalid-poll {
+    margin-top: 150px;
+    margin-bottom: 150px;
+    color: #545454;
+    text-align: center;
 }
 
 #graph {

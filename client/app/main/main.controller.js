@@ -149,14 +149,15 @@ angular.module('myYoAppApp')
     };
 
     $scope.showPollDetails = function(id) {
+      $rootScope.invalidPoll = false;
       $rootScope.graphLoading = true;
       $scope.showPolls = false; // need a better way, this method of show/hide becomes more confusing as num grows
       // grab the poll matching the given id from the db
       $http.get('/api/polls/' + id).success(function(poll) {
         console.log("GET poll called");
+        console.log(poll);
         $scope.poll = poll;
         $rootScope.sharedPoll = poll; // // allows user to vote on /polls/:pollid page
-        console.log($scope.poll);
 
         // check to see if the user has already voted on the poll
         $rootScope.displayVoteChoice = userHasVoted(poll);
@@ -194,6 +195,9 @@ angular.module('myYoAppApp')
           }
 
         });        
+      }).error(function(err) {
+        $rootScope.invalidPoll = true;
+        console.log(err);
       });
       $scope.showGraph = true;
 
