@@ -7,12 +7,17 @@ angular.module('myYoAppApp')
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.isAdmin = Auth.isAdmin;
-    $scope.getCurrentUser = Auth.getCurrentUser;
+    $rootScope.getCurrentUser = Auth.getCurrentUser;
+
+    console.log("USER NAME BELOW THIS");
+    console.log($rootScope.getCurrentUser().name);
+
 
     var reset = function() {
       $scope.dummyPoll = {
         title: "What is your favorite brand of soda?",
-        author: $scope.getCurrentUser()._id,
+        author: $rootScope.getCurrentUser()._id,
+        username: $rootScope.getCurrentUser().name,
         options: [
           {option: "coke", count: 0}, 
           {option: "pepsi", count: 0}
@@ -21,7 +26,8 @@ angular.module('myYoAppApp')
 
       $scope.poll = {
         title: "",
-        author: $scope.getCurrentUser()._id,
+        author: $rootScope.getCurrentUser()._id,
+        username: $rootScope.getCurrentUser().name,
         options: [
           {option: "", count: 0 },
           {option: "", count: 0 },
@@ -32,6 +38,8 @@ angular.module('myYoAppApp')
 
     // called to populate empty poll on launch
     reset();
+    console.log("reset called");
+    console.log($scope.poll);
 
     $scope.newPoll = function() {
       $scope.showGraph = false;
@@ -40,6 +48,11 @@ angular.module('myYoAppApp')
 
     $scope.addPoll = function() {
       $scope.showGraph = false;
+
+      // if an unregistered or not logged in user creates a poll
+      if ($scope.poll.name === undefined) {
+        $scope.poll.name = 'anonymous';
+      }
 
       $http.post('/api/polls', $scope.poll).success(function(poll){
         $scope.poll = poll;
@@ -50,8 +63,8 @@ angular.module('myYoAppApp')
     $scope.getUserPolls = function() {
       $scope.showGraph = false;
 
+      $scope.isUserPoll = true;
       // console.log($scope.getCurrentUser()._id);
-
       $http.get('/api/polls/userpolls/' + $scope.getCurrentUser()._id).success(function(polls) {
         $scope.polls = polls;
         $scope.showPolls = true;
@@ -60,6 +73,7 @@ angular.module('myYoAppApp')
 
     $scope.getPolls = function() {
       $scope.showGraph = false;
+      $scope.isUserPoll = false;
 
       $http.get('/api/polls').success(function(polls) {
         $scope.polls = polls;
@@ -67,9 +81,14 @@ angular.module('myYoAppApp')
       });
     };
 
+    $scope.sharePollPage = function(idPoll) {
+      $scope.showPollDetails(idPoll);        
+      var url = $location.url('/polls/' + idPoll);
+    };
+
     $scope.deletePoll = function(id) {
       $http.delete('/api/polls/' + id).success(function() {
-        $scope.getPolls();
+        $scope.getUserPolls();
       });
     };
 
@@ -89,9 +108,10 @@ angular.module('myYoAppApp')
       $scope.dummyPoll.options.push({option: "new option", count: 0});
     };  
 
-    $scope.addVoteCount = function(index) {
-      
-      var updatedPoll = $scope.poll;
+    $scope.addVoteCount = function(index, poll) {
+      console.log("addVoteCount called");
+      console.log(poll);
+      var updatedPoll = poll;
       // check to see if this user has already voted
 
       if (updatedPoll.votedUsers.indexOf($scope.getCurrentUser()._id) > -1) {
@@ -103,12 +123,15 @@ angular.module('myYoAppApp')
         // update count value
         updatedPoll.options[index].count++;
         // update changes to the db 
-        $http.put('/api/polls/' + $scope.poll._id, updatedPoll).success(function(updatedPoll) { 
+        $http.put('/api/polls/' + poll._id, updatedPoll).success(function(updatedPoll) { 
           console.log("the poll item has been updated");
           console.log(updatedPoll);
           $scope.poll = updatedPoll;
 
+          $rootScope.sharedPoll = updatedPoll;  // allows user to vote on /polls/:pollid page
+
           $scope.showPollDetails($scope.poll._id);
+
 
           $scope.pollPosted = false;
           $scope.showGraph = true;
@@ -118,7 +141,7 @@ angular.module('myYoAppApp')
     };
 
     var userHasVoted = function(poll) {
-      if (poll.votedUsers.indexOf($scope.getCurrentUser()._id) > -1) {
+      if (poll.votedUsers.indexOf($rootScope.getCurrentUser()._id) > -1) {
         return true;
       } else {
         return false;
@@ -126,13 +149,17 @@ angular.module('myYoAppApp')
     };
 
     $scope.showPollDetails = function(id) {
+      $rootScope.graphLoading = true;
       $scope.showPolls = false; // need a better way, this method of show/hide becomes more confusing as num grows
       // grab the poll matching the given id from the db
       $http.get('/api/polls/' + id).success(function(poll) {
+        console.log("GET poll called");
         $scope.poll = poll;
+        $rootScope.sharedPoll = poll; // // allows user to vote on /polls/:pollid page
+        console.log($scope.poll);
 
         // check to see if the user has already voted on the poll
-        $scope.displayVoteChoice = userHasVoted($scope.poll);
+        $rootScope.displayVoteChoice = userHasVoted(poll);
 
         google.load('visualization', '1', {packages: ['corechart', 'bar'],
           callback: function() {
@@ -155,7 +182,7 @@ angular.module('myYoAppApp')
                              easing: 'out', 
                            }
                           };
-                           // vAxis: {minValue:0, maxValue: 10},
+                           // vAxis: {minValue: 0, maxValue: 10},
                            // 'width': 700,
                            // 'height': 500 };
 
@@ -171,5 +198,16 @@ angular.module('myYoAppApp')
       $scope.showGraph = true;
 
     };
+
+    // $rootScope.graphLoading = false;
+    if ($location.path().indexOf('/polls/') !== -1 && !$rootScope.graphLoading) {
+      var idPoll = $location.path().slice(7, $location.path().length);
+      console.log("GRAPH NOT LOADING");
+      console.log(idPoll);
+      $scope.showPollDetails(idPoll);
+
+    } else {
+      console.log("no");
+    }
 
   });

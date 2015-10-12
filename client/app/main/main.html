@@ -15,8 +15,8 @@
     <h1>Dashboard</h1>
     <p class="lead">What would you like to do today?</p>
     <button class="btn btn-success" ng-click="newPoll() ; showPolls = false ; pollPosted = false">New Poll</button>
-    <button class="btn btn-info" ng-click="getPolls() ; pollPosted = false">All Polls</button>
-    <button class="btn btn-info" ng-click="getUserPolls() ; pollPosted = false">My Polls</button>
+    <button class="btn btn-warning" ng-click="getPolls() ; pollPosted = false">All Polls</button>
+    <button id="user-polls-btn" class="btn btn-info" ng-click="getUserPolls() ; pollPosted = false">My Polls</button>
   </div>
 </header>
 
@@ -86,7 +86,7 @@
     <h2><span id="poll-title-vote">{{poll.title}}</span> has been posted</h2>
     <h3 id="cast-vote-question">Would you like to cast your vote now?</h3>
       <div class="poll-vote" ng-repeat="options in poll.options track by $index">        
-        <button class="btn btn-info" ng-click="addVoteCount($index)">{{options.option}}</button>
+        <button class="btn btn-info" ng-click="addVoteCount($index, poll)">{{options.option}}</button>
       </div>
   </div>
   <!-- END ADD VOTE TO POLL -->
@@ -99,22 +99,31 @@
           <span id="poll-title-text">{{poll.title}}</span>
         </div>
         <div id="del-poll-btn-div">
-          <button id="del-poll-btn" class="btn" ng-click="deletePoll(poll._id)"><i class="fa fa-trash-o"></i></button>
+          <button id="del-poll-btn" class="btn" ng-show="isUserPoll" ng-click="deletePoll(poll._id)"><i class="fa fa-trash-o"></i></button>
+
+          <button id="get-poll-info-btn" class="btn" ng-hide="isUserPoll" ng-click="sharePollPage(poll._id)"><i class="fa fa-info"></i></button>
         </div>
       </div>
   </div>
   <!-- END VIEW POLLS -->
-
+ 
   <!-- SHOW POLL DETAILS(GRAPH) -->
   <div class="container" id="graph" ng-show="showGraph">
     <h3>{{poll.title}}</h1>
+    <p id="username-text"><i id="user-icon" class="fa fa-user"></i>  {{poll.username}}</p>
     <div id="chart_div" align='center'></div>
 
     <div ng-hide="displayVoteChoice">
       <div class="poll-vote" ng-repeat="options in poll.options">
-        <button class="btn btn-info" ng-click="addVoteCount($index)">{{options. option}}</button>
+        <button class="btn btn-info" ng-click="addVoteCount($index, poll)">{{options. option}}</button>
      </div>
     </div>
+
+    <!-- SHARING LINK -->  
+    <div id="share-poll">
+      <p><span>Share it!</span>   <i class="fa fa-hand-o-right"></i>    http://localhost:9000/polls/{{poll._id}}</p>
+    </div>
+    <!-- END SHARING LINK -->     
 
   </div>
   <!-- END SHOW POLL DETAILS(GRAPH) -->

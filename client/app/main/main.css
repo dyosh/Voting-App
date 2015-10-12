@@ -3,6 +3,23 @@
     text-align: center;
 }
 
+#share-poll {
+    margin-top: 25px;
+}
+
+#user-icon {
+    font-size: 18px;
+    color: #4394B9;
+}
+
+#username-text {
+    font-size: 20px;
+}
+
+#user-polls-btn { 
+    background: #54B4CF;
+}
+
 #globe {
     font-size: 95px; 
     color: #5BB95C;   
@@ -37,6 +54,24 @@
 #del-poll-btn-div {
     width: 45px;
     float: left;
+}
+
+#get-poll-info-btn {
+    background: #C3C3C3;
+    color: white;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    width: 45px;
+    height: 28px;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 10px;
+}
+
+#get-poll-info-btn:hover {
+    background: #FF9933;
 }
 
 #del-poll-btn {
@@ -124,6 +159,7 @@ input, .input-group {
 #new-poll {
     text-align: center;
     max-width: 600px;
+    color: #545454;
 }
 
 #poll-header {
@@ -155,6 +191,7 @@ input, .input-group {
 }
 
 #graph {
+    color: #545454;
     text-align: center;
     margin-top: 25px;
 }

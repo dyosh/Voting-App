@@ -6,5 +6,9 @@ angular.module('myYoAppApp')
       .when('/', {
         templateUrl: 'app/main/main.html',
         controller: 'MainCtrl'
+      })
+      .when('/polls/:author', {
+        templateUrl: 'app/main/polls.html',
+        controller: 'MainCtrl'
       });
   });

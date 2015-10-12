@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myYoAppApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location, $window) {
+  .controller('LoginCtrl', function ($scope, $rootScope, Auth, $location, $window) {
     $scope.user = {};
     $scope.errors = {};
 
