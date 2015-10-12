@@ -137,9 +137,11 @@ angular.module('myYoAppApp')
     };
 
     var userHasVoted = function(poll) {
-      if (poll.votedUsers.indexOf($rootScope.getCurrentUser()._id) > -1) {
+      if (poll.votedUsers.indexOf($rootScope.getCurrentUser()._id) !== -1) {
+        console.log("USER HAS ALREADY VOTED");
         return true;
       } else {
+        console.log("USER HAS NOT VOTED YET");
         return false;
       }
     };
